@@ -26,6 +26,35 @@ structure.
 - Sign in (Email/Google) → Home → Scan a barcode → View product details.
 - Cached images and lightweight state keep interactions snappy.
 
+## Showcase 📸
+
+Real screens from the app (portrait):
+
+### Authentication 🔐
+<table>
+  <tr>
+    <td align="center"><img src="showcase/login1-portrait.png" alt="Login 1" width="220"/></td>
+    <td align="center"><img src="showcase/login2-portrait.png" alt="Login 2" width="220"/></td>
+    <td align="center"><img src="showcase/login3-portrait.png" alt="Login 3" width="220"/></td>
+  </tr>
+  </table>
+
+### Home & Settings 🏠⚙️
+<table>
+  <tr>
+    <td align="center"><img src="showcase/main%20page-portrait.png" alt="Main Page" width="220"/></td>
+    <td align="center"><img src="showcase/settings-portrait.png" alt="Settings" width="220"/></td>
+  </tr>
+</table>
+
+### Product Pages 🥫
+<table>
+  <tr>
+    <td align="center"><img src="showcase/product1-portrait.png" alt="Product 1" width="220"/></td>
+    <td align="center"><img src="showcase/product2-portrait.png" alt="Product 2" width="220"/></td>
+  </tr>
+</table>
+
 ## Tech Stack 🧩
 
 - Flutter SDK with Dart 3.9
