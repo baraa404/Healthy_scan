@@ -1,45 +1,68 @@
-# Haelthy Scan 🧾🔍
+# Healthy Scan
 
-A modern Flutter app scaffold integrating Firebase Auth, product lookup,
-and barcode scanning with clean architecture and Provider state management.
+<p align="center">
+  <img src="assets/logo.png" alt="Healthy Scan" width="120" />
+</p>
 
-## Overview
+<p align="center">
+  <b>Scan. Decode. Decide.</b><br/>
+  A Flutter mobile app that turns product barcodes into clear nutrition and sustainability signals.
+</p>
 
-Haelthy Scan is a cross-platform Flutter application built with Dart
-3.9 that showcases authentication, product data fetching, and barcode
-scanning capabilities. It uses Firebase for identity, OpenFoodFacts for
-product information, and follows recommended Flutter lints and
-structure.
+<p align="center">
+  <img alt="Flutter" src="https://img.shields.io/badge/Flutter-02569B?style=flat-square&logo=flutter&logoColor=white" />
+  <img alt="Dart" src="https://img.shields.io/badge/Dart-3.9-0175C2?style=flat-square&logo=dart&logoColor=white" />
+  <img alt="Firebase" src="https://img.shields.io/badge/Firebase-Auth-FFCA28?style=flat-square&logo=firebase&logoColor=black" />
+  <img alt="OpenFoodFacts" src="https://img.shields.io/badge/OpenFoodFacts-API-5A9E6F?style=flat-square" />
+  <img alt="State" src="https://img.shields.io/badge/State-Provider-purple?style=flat-square" />
+</p>
 
-## Features ✨
+---
 
-- 🔐 Authentication: Email/Password and Google Sign-In via Firebase.
-- 📷 Barcode Scanning: Fast camera-based scanning with permission handling.
-- 🥫 Product Lookup: Names, images, brands from OpenFoodFacts.
-- ✨ Smart UI: Animated bottom navigation and responsive layouts.
-- 🧠 State Management: Simple, predictable app state using Provider.
-- 🌐 Networking: Robust HTTP via Dio (interceptors, retries).
-- 🖼️ Image Caching: Smooth product images with cached_network_image.
-- 🖥️📱🕸️ Multi-platform: Android, iOS, Web, Linux, macOS, Windows.
+## Why this exists
 
-### User Flow Highlights 🚶‍♂️ → 📷 → 🥫
-- Sign in (Email/Google) → Home → Scan a barcode → View product details.
-- Cached images and lightweight state keep interactions snappy.
+Most shoppers see a barcode. Healthy Scan sees a decision surface.
 
-## Showcase 📸
+Point the camera at a product → fetch structured food data from **Open Food Facts** → surface **Nutri-Score**, **Eco-Score**, **NOVA**, macros, allergens, and ingredients in a clean product view.
+
+Built as a production-shaped Flutter app: Firebase identity, permission-aware scanning, service-layer networking, and Provider-driven UI state.
+
+## Features
+
+| Area | What you get |
+|------|----------------|
+| Auth | Email/password + Google Sign-In via Firebase Auth |
+| Scanning | Camera barcode scan with runtime permission handling |
+| Product intel | Name, brand, image, quantity, ingredients, allergens |
+| Scores | Nutri-Score · Eco-Score · NOVA processing group |
+| Nutrition | Energy, macros, salt/sodium and related nutriments (per 100g) |
+| UX | Onboarding, docked scan FAB, animated bottom nav, cached product images |
+| Architecture | Views → Providers → Services → Models |
+
+## User flow
+
+```text
+Welcome → Register / Login (Email or Google)
+       → Home (NOVA / Nutri / Eco education)
+       → Scan FAB → Camera → Barcode
+       → Product details (scores + nutrition + ingredients)
+       → Profile / Settings
+```
+
+## Showcase
 
 Real screens from the app (portrait):
 
-### Authentication 🔐
+### Authentication
 <table>
   <tr>
     <td align="center"><img src="showcase/login1-portrait.png" alt="Login 1" width="220"/></td>
     <td align="center"><img src="showcase/login2-portrait.png" alt="Login 2" width="220"/></td>
     <td align="center"><img src="showcase/login3-portrait.png" alt="Login 3" width="220"/></td>
   </tr>
-  </table>
+</table>
 
-### Home & Settings 🏠⚙️
+### Home & Settings
 <table>
   <tr>
     <td align="center"><img src="showcase/main%20page-portrait.png" alt="Main Page" width="220"/></td>
@@ -47,7 +70,7 @@ Real screens from the app (portrait):
   </tr>
 </table>
 
-### Product Pages 🥫
+### Product Pages
 <table>
   <tr>
     <td align="center"><img src="showcase/product1-portrait.png" alt="Product 1" width="220"/></td>
@@ -55,140 +78,111 @@ Real screens from the app (portrait):
   </tr>
 </table>
 
-## Tech Stack 🧩
+## Architecture
 
-- Flutter SDK with Dart 3.9
-- Firebase Core/Auth
-- Google Sign-In
-- Provider
-- Dio
-- OpenFoodFacts
-- Permission Handler
-- Cached Network Image
-- Animated Bottom Navigation Bar
-
-Full list in [pubspec.yaml](pubspec.yaml).
-
-## Project Structure 🗂️
-
-- App entrypoint: [lib/main.dart](lib/main.dart)
-- Firebase config: [lib/firebase_options.dart](lib/firebase_options.dart)
-- Modules: [lib/modules/](lib/modules)
-- Providers: [lib/providers/](lib/providers)
-- Services: [lib/service/](lib/service)
-- UI: [lib/views/](lib/views)
-- Lints: [analysis_options.yaml](analysis_options.yaml)
-
-## Prerequisites ✅
-
-- Flutter SDK installed and in PATH
-- Dart SDK 3.9+ (managed by Flutter)
-- A configured Firebase project
-
-Verify setup:
-
-```bash
-flutter --version
-dart --version
+```text
+┌──────────────────┐     ┌────────────────────┐     ┌─────────────────────┐
+│  Views / Widgets │ ──▶ │  Providers (state) │ ──▶ │  Services / Models  │
+│  screens + UI    │     │  Auth · Barcode    │     │  Dio · OFF · DTOs   │
+└──────────────────┘     └────────────────────┘     └─────────────────────┘
+         │                          │
+         │                          ▼
+         │                 Firebase Auth / Google
+         ▼
+   Camera + Permissions → Open Food Facts product payload
 ```
 
-## Setup ⚙️
+**Separation of concerns**
+- `views/` — screens & presentational widgets
+- `providers/` — auth + scan orchestration (`ChangeNotifier`)
+- `service/` — HTTP product lookup (Dio → Open Food Facts)
+- `modules/` — typed product / nutriment models from API JSON
 
-1) Install packages and generate platform files:
+## Project structure
+
+```text
+lib/
+├── main.dart                 # Firebase init + MultiProvider bootstrap
+├── firebase_options.dart     # FlutterFire platform config
+├── modules/
+│   └── product.module.dart   # ProductsModel · Product · Nutriments
+├── providers/
+│   ├── auth_provider.dart    # Email/password + Google Sign-In
+│   └── bracode_provider.dart # Camera permission + scanner flow
+├── service/
+│   └── product.service.dart  # Open Food Facts API client
+└── views/
+    ├── screens/              # Welcome, auth, home, product, main shell
+    └── widgets/              # Product header & shared UI pieces
+
+assets/                       # Branding + onboarding imagery
+showcase/                     # App screenshots for this README
+android/ · ios/               # Platform projects + Firebase config
+```
+
+## Tech stack
+
+| Layer | Choice |
+|-------|--------|
+| Framework | Flutter · Dart `^3.9.2` |
+| Auth | `firebase_core` · `firebase_auth` · `google_sign_in` |
+| State | `provider` |
+| Networking | `dio` → Open Food Facts REST (`/api/v0/product/{barcode}`) |
+| Scanning | `simple_barcode_scanner` · `permission_handler` |
+| UI | `animated_bottom_navigation_bar` · `cached_network_image` · `icons_plus` |
+| Validation | `email_validator` |
+
+Full dependency list: [`pubspec.yaml`](pubspec.yaml)
+
+## Open Food Facts fields used
+
+The product service requests a focused field set (not the full dump):
+
+`product_name` · `brands` · `quantity` · `nutriscore_grade` · `ecoscore_grade` · `ingredients_text` · `allergens_tags` · `nutriments` · `categories_tags` · `image_url` · `nova_group`
+
+## Getting started
+
+**Prerequisites**
+- Flutter SDK (Dart 3.9+)
+- Android Studio / Xcode as needed
+- A Firebase project with Auth (Email + Google) enabled
 
 ```bash
+git clone https://github.com/baraa404/Healthy_scan.git
+cd Healthy_scan
 flutter pub get
 ```
 
-2) Configure Firebase (if not already):
+**Firebase**
+- Confirm [`lib/firebase_options.dart`](lib/firebase_options.dart)
+- Android: `android/app/google-services.json`
+- iOS: `GoogleService-Info.plist` in the Runner target
 
-- Ensure `flutterfire` has been run to generate
-	[lib/firebase_options.dart](lib/firebase_options.dart).
-- Android: place `google-services.json` at
-	[android/app/google-services.json](android/app/google-services.json).
-- iOS/macOS: add `GoogleService-Info.plist` to platform Runner targets as
-	applicable.
-- Web: confirm `firebase.json` and web configuration.
+**Permissions**
+- Android camera entries in `AndroidManifest.xml`
+- iOS camera usage string in `ios/Runner/Info.plist`
 
-Helpful guide: https://firebase.google.com/docs/flutter/setup
-
-3) Platform permissions (for camera/barcode):
-
-- Android: review and adjust [android/app/src/main/AndroidManifest.xml](android/app/src/main/AndroidManifest.xml)
-	for camera permissions.
-- iOS: add camera usage description to Info.plist in
-	[ios/Runner/Info.plist](ios/Runner/Info.plist).
-
-## Running ▶️
-
-Start the app on a connected device or emulator:
+**Run**
 
 ```bash
-# Android
-flutter run -d android
-
-# iOS (on macOS with Xcode)
-flutter run -d ios
-
-# Web
-flutter run -d chrome
-
-# Linux/macOS/Windows (as supported)
-flutter run -d linux
-flutter run -d macos
-flutter run -d windows
-```
-
-## Useful Commands 🧰
-
-```bash
-# Clean build outputs and fetch packages
-flutter clean && flutter pub get
-
-# Analyze with Flutter lints
-flutter analyze
-
-# Run tests (if present)
-flutter test
-
-# List connected devices
 flutter devices
+flutter run -d android   # or ios / chrome / linux / macos / windows
 ```
 
-## Code Quality 🧹
-
-- Linting rules configured via [analysis_options.yaml](analysis_options.yaml)
-	using `flutter_lints`.
-- Prefer immutable widgets and small, composable components.
-- Keep business logic in services/providers; UI in views/widgets.
-
-## Configuration Notes 🗝️
-
-- Environment secrets (Firebase keys) are managed by platform config files
-	and `firebase_options.dart`. Avoid committing private keys beyond required
-	client-side configs.
-- Assets are loaded from [assets/](assets) as declared in
-	[pubspec.yaml](pubspec.yaml).
-
-## Troubleshooting 🛠️
-
-- If packages fail to resolve, run:
+## Useful commands
 
 ```bash
 flutter clean && flutter pub get
+flutter analyze
+flutter test
 ```
 
-- For Firebase initialization errors, confirm:
-	- [lib/firebase_options.dart](lib/firebase_options.dart) exists and matches
-		your Firebase project.
-	- Platform config files are in expected locations.
+## Notes for reviewers
 
-- Camera/barcode issues:
-	- Verify runtime permissions and manifest/Info.plist entries.
-	- Test on a physical device for camera access.
+- Package name in `pubspec.yaml` is still `depi_project` (original course/project id); product branding is **Healthy Scan**.
+- Client Firebase config is expected for Flutter apps; do not commit private server secrets.
+- Camera scanning is best validated on a **physical device**.
 
-## Contributing 🤝
+## License
 
-Pull requests and suggestions are welcome. Please keep changes focused,
-linted, and consistent with the existing structure.
-
+Personal / portfolio project. Reach out if you want to reuse or extend it.
