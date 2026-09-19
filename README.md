@@ -1,5 +1,9 @@
 # Healthy Scan
 
+<div align="center">
+  **English** · **[العربية](README.ar.md)**
+</div>
+
 <p align="center">
   <img src="assets/logo.png" alt="Healthy Scan" width="120" />
 </p>
